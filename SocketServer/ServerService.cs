@@ -22,7 +22,7 @@ namespace SocketServer
             string hostName = Dns.GetHostName();
             IPHostEntry ipHostInfo = Dns.GetHostEntry(hostName);
             this.ipAddress = null;
-            for (int i = 0; i < ipHostInfo.AddressList.Length; ++i)
+            /*for (int i = 0; i < ipHostInfo.AddressList.Length; ++i)
             {
                 if (ipHostInfo.AddressList[i].AddressFamily ==
                   AddressFamily.InterNetwork)
@@ -30,7 +30,8 @@ namespace SocketServer
                     this.ipAddress = ipHostInfo.AddressList[i];
                     break;
                 }
-            }
+            }*/
+            this.ipAddress = IPAddress.Loopback;
             if (this.ipAddress == null)
                 throw new Exception("No IPv4 address for server");
         }
