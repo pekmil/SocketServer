@@ -19,18 +19,7 @@ namespace SocketServer
         public AsyncService(int port)
         {
             this.port = port;
-            string hostName = Dns.GetHostName();
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(hostName);
-            this.ipAddress = null;
-            /*for (int i = 0; i < ipHostInfo.AddressList.Length; ++i)
-            {
-                if (ipHostInfo.AddressList[i].AddressFamily ==
-                  AddressFamily.InterNetwork)
-                {
-                    this.ipAddress = ipHostInfo.AddressList[i];
-                    break;
-                }
-            }*/
+            
             this.ipAddress = IPAddress.Loopback;
             if (this.ipAddress == null)
                 throw new Exception("No IPv4 address for server");
@@ -65,7 +54,7 @@ namespace SocketServer
                 StreamReader reader = new StreamReader(networkStream);
                 StreamWriter writer = new StreamWriter(networkStream);
                 writer.AutoFlush = true;
-
+                
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
 
                 while (true)
@@ -81,17 +70,19 @@ namespace SocketServer
                     }
                     else
                     {
-                        Console.WriteLine(requestStr == null);
+                        Console.WriteLine("Connection closed, client: " + clientEndPoint);
                         break; // Client closed connection
                     }
                 }
                 tcpClient.Close();
             }
             catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
+            {                
                 if (tcpClient.Connected)
+                {                    
                     tcpClient.Close();
+                }
+                Console.WriteLine("Connection closed, client: " + clientEndPoint);
             }
         }
         private static CommObject Response(CommObject request)
